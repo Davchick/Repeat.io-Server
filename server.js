@@ -1,3 +1,4 @@
+import authRoutes from "./routes/auth.routes.js";
 import mongoose from "mongoose";
 import express from "express";
 import helmet from "helmet";
@@ -13,6 +14,9 @@ app.use(express.json());
 app.use(morgan("common"));
 app.use(cors());
 dotenv.config();
+
+/* ROUTES */
+app.use("/auth", authRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 3000;
