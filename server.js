@@ -1,4 +1,5 @@
 import authRoutes from "./routes/auth.routes.js";
+import keepAlive from "./utils/keepAlive.js";
 import mongoose from "mongoose";
 import express from "express";
 import helmet from "helmet";
@@ -23,6 +24,10 @@ const PORT = process.env.PORT || 3000;
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() =>
-    app.listen(PORT, () => console.log(`Server works on port - ${PORT}`))
+    app.listen(
+      PORT,
+      () => console.log(`Server works on port - ${PORT}`),
+      setInterval(keepAlive, 30000)
+    )
   )
   .catch((err) => console.log(err));
