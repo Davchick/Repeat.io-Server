@@ -31,10 +31,10 @@ export const login = async (req, res) => {
     const validUser = await User.findOne({
       $or: [{ username: credentials }, { email: credentials }],
     });
-    if (!validUser) return res.status(401);
+    if (!validUser) return res.status(401).json("Invalid credentials");
 
     const validPassword = bcrypt.compareSync(password, validUser.password);
-    if (!validPassword) return res.status(401);
+    if (!validPassword) return res.status(401).json("Invalid credentials");
 
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
     const { password: none, ...rest } = validUser._doc;
@@ -43,6 +43,6 @@ export const login = async (req, res) => {
       .status(200)
       .json(rest);
   } catch (err) {
-    res.status(500);
+    res.status(500).json("Error on server side");
   }
 };
