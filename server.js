@@ -5,6 +5,7 @@ import express from "express";
 import helmet from "helmet";
 import dotenv from "dotenv";
 import morgan from "morgan";
+import multer from "multer";
 import cors from "cors";
 
 /* CONFIGURATIONS */
@@ -15,6 +16,20 @@ app.use(express.json());
 app.use(morgan("common"));
 app.use(cors());
 dotenv.config();
+
+/* FILE STORAGE */
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "/tmp/my-uploads");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname + "-" + Date.now());
+  },
+});
+const upload = multer({ storage });
+
+/* ROUTES W/ FILES */
+app.post("/");
 
 /* ROUTES */
 app.use("/auth", authRoutes);
